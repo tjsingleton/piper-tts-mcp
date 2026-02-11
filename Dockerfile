@@ -6,7 +6,8 @@ WORKDIR /app
 RUN pip install --no-cache-dir piper-tts[http]
 
 # Download the voice model specified
-RUN python3 -m piper.download_voices en_GB-cori-high
+# Disable SSL verification to allow corporate VPN certificates
+RUN python3 -c "import ssl; ssl._create_default_https_context = ssl._create_unverified_context; import runpy; import sys; sys.argv = ['piper.download_voices', 'en_GB-cori-high']; runpy.run_module('piper.download_voices', run_name='__main__')"
 
 # Expose the default port
 EXPOSE 5000
